@@ -14,8 +14,8 @@ PIN_A_PO = 5
 PIN_A_NE = 6
 
 PWM_B = 13
-PIN_B_PO =16
-PIN_B_NE = 26
+PIN_B_PO = 26
+PIN_B_NE = 16
 
 GPIO.setup(PWM_A, GPIO.OUT)
 GPIO.setup(PWM_B, GPIO.OUT)
@@ -37,28 +37,40 @@ def setspeed(speed):
 
 try:
     while True:
+        GPIO.output(PIN_B_PO,GPIO.HIGH)
+        GPIO.output(PIN_B_NE,GPIO.LOW)
+        setspeed(100)
+        usr_input = None
         usr_input = input("direction:")
-        if usr_input == "forword":
-            GPIO.output(PIN_A_PO,GPIO.HIGH)
-            GPIO.output(PIN_A_NE,GPIO.LOW)
-            GPIO.output(PIN_B_PO,GPIO.LOW)
-            GPIO.output(PIN_B_NE,GPIO.HIGH)
-            setspeed(100)
-        elif usr_input == "reverse":
-            GPIO.output(PIN_A_PO,GPIO.LOW)
-            GPIO.output(PIN_A_NE,GPIO.HIGH)
+        if usr_input == "forward" or "w":
+            setspeed(0)
+            # GPIO.output(PIN_A_PO,GPIO.HIGH)
+            # GPIO.output(PIN_A_NE,GPIO.LOW)
             GPIO.output(PIN_B_PO,GPIO.HIGH)
             GPIO.output(PIN_B_NE,GPIO.LOW)
+            usr_input = None
             setspeed(100)
-        elif usr_input == "right":
+        if usr_input == "reverse" or "s":
+            setspeed(0)
+            # GPIO.output(PIN_A_PO,GPIO.LOW)
+            # GPIO.output(PIN_A_NE,GPIO.HIGH)
+            GPIO.output(PIN_B_PO,GPIO.HIGH)
+            GPIO.output(PIN_B_NE,GPIO.LOW)
+            usr_input = None
+            setspeed(10)
+        elif usr_input == "right" or "a":
             pass
-        elif usr_input == "left":
+        elif usr_input == "left" or "d":
             pass
-        elif usr_input == "stop":
-            GPIO.output(PIN_A_PO,GPIO.LOW)
-            GPIO.output(PIN_A_NE,GPIO.LOW)
-            GPIO.output(PIN_A_PO,GPIO.LOW)
-            GPIO.output(PIN_A_NE,GPIO.LOW)
+        elif usr_input == "stop" or "k":
+            # GPIO.output(PIN_A_PO,GPIO.LOW)
+            # GPIO.output(PIN_A_NE,GPIO.LOW)
+            GPIO.output(PIN_B_PO,GPIO.LOW)
+            GPIO.output(PIN_B_NE,GPIO.LOW)
+            setspeed(0)
+        else:
+            GPIO.output(PIN_B_PO,GPIO.LOW)
+            GPIO.output(PIN_B_NE,GPIO.LOW)
             setspeed(0)
 except KeyboardInterrupt:
     pwm_a.stop()  # 停止PWM输出
